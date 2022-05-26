@@ -28,7 +28,7 @@ The csv file is read using pandas and saved in a dataframe. The quotes are read 
 The docx file is read using py-docx package. The quotes are saved to a list of QuoteModel objects.
 
 #### PdfIngestor
-The PDFIngestor class utilizes the subprocess module to call the pdftotext CLI utility—creating a pipeline that converts PDFs to text and then ingests the text.
+The PDFIngestor class utilizes the subprocess module to call the pdftotext CLI utility—creating a pipeline that converts PDFs to text and then ingests the text. The parse method utilizes the packages subprocess, tempfile and os.
 
 #### TxtIngestor
 The TxtIngestor uses the built-in capabilities of python without using another package. The quotes are read and saved to a list of QuoteModel objects.
@@ -37,4 +37,4 @@ The TxtIngestor uses the built-in capabilities of python without using another p
 Ingestor class encapsulates the helper classes for the different file type (pdf, txt, csv, docx) and picks the Ingestor according to the file type. Realizes IngestorInterface
 
 ### MemeEnginge
-The Meme Engine Module is responsible for manipulating and drawing text onto images. The
+The Meme Engine Module is responsible for manipulating and drawing text onto images. The packages utilizes PILLOW for loading and manipulating pictures. The randint method from the package random is used for randomizing choices.
