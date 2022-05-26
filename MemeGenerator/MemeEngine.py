@@ -1,4 +1,6 @@
-import PIL as PL
+from PIL import Image, ImageFont, ImageDraw
+from random import randint
+
 
 class MemeEngine:
     """
@@ -8,24 +10,28 @@ class MemeEngine:
     def __init__(self, path):
         self.file_path = path
 
-    def load_image(self):
-        """Loads an image file from disc"""
-        pass
-
-    def transform_image(self):
-        """Resizes picture to max width of 500px, keeping aspect ratio"""
-        pass
-
-    def add_caption(self):
-        """Adds quote caption at random location into picture"""
-        pass
-
-    def make_meme(self, img, body, author):
+    def make_meme(self, path, body, author, width=500) -> str:
+        """Method creates a random meme
+        path -- path to Image
+        body -- Text of a quote (String)
+        author -- Author of a quote (String)
         """
-        Method creates a random meme
-        Input:
-        img - Image for the meme
-        body - Text of a quote (String)
-        author - Author of a quote (String)
-        """
-        pass
+
+        with Image.open(path) as image:
+            # copy image to new object
+            meme = image.copy()
+            # resize
+            meme.thumbnail(width)
+            # add caption
+            draw = ImageDraw.Draw(meme)
+            random_x = randint(10, width - 50)
+            random_y = randint(10, width - 50)
+            font =  ImageFont.truetype("src/_data/fonts/comici.ttf", 15)
+            # draw body
+            draw.text((random_x, random_y), body, font=font, encoding="unic", fill='red' )
+            # save file
+            file_path = f"{self.file_path}/{randint(0,1000)}.png"
+            meme.save(file_path)
+
+        return file_path
+
