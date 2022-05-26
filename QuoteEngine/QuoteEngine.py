@@ -4,10 +4,11 @@ import csv
 import subprocess
 import tempfile
 import os
+import pandas as pd
 
 
 class QuoteModel:
-    """Quotemodell class encapsulates body and author of Quotes"""
+    """QuoteModel class encapsulates body and author of Quotes"""
     body = ''
     author = ''
 
@@ -25,6 +26,9 @@ class IngestorInterface(ABC):
     @property
     @abstractmethod
     def file_extension(self):
+        """
+        Property attribute for the file extension of the ingestor
+        """
         pass
 
     @classmethod
@@ -46,7 +50,9 @@ class IngestorInterface(ABC):
 
 
 class CsvIngestor(IngestorInterface):
-    """Ingestor for csv input. Implements IngestorInterface"""
+    """
+    Ingestor for csv input. Implements IngestorInterface
+    """
     file_extension = 'csv'
 
     # override abstract method
@@ -58,10 +64,9 @@ class CsvIngestor(IngestorInterface):
         output: List of QuoteModel objects
         """
         quote_list = []
-        with open(path, mode='r') as file:
-            csv_file = csv.reader(file)
-            for line in csv_file:
-                quote_list.append(QuoteModel(line[0], line[1]))
+        df = pd.read_csv(path)
+        for index, row in df.iterrows():
+            quote_list.append(row['body'], row['author'])
 
         return quote_list
 
