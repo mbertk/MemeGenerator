@@ -26,42 +26,31 @@ class IngestorInterface(ABC):
     @property
     @abstractmethod
     def file_extension(self):
-        """
-        Property attribute for the file extension of the ingestor
-        """
+        """Property attribute for the file extension of the ingestor"""
         pass
 
     @classmethod
     def can_ingest(cls, path) -> bool:
-        """
-        Class method to check if the file can be ingested
-        Input: path (String)
-        Output: Boolean
+        """Check if the file can be ingested and return bool
+        path -- path to file (String)
         """
         file_ext = path.split('.')
         return file_ext[-1] == cls.file_extension
 
     @abstractmethod
     def parse(cls, path: str) -> list[QuoteModel]:
-        """
-        Abstract method to parse the file
-        """
+        """Abstract method to parse the file"""
         pass
 
 
 class CsvIngestor(IngestorInterface):
-    """
-    Ingestor for csv input. Implements IngestorInterface
-    """
+    """Ingestor for csv input. Implements IngestorInterface"""
     file_extension = 'csv'
 
     # override abstract method
     def parse(cls, path: str) -> list[QuoteModel]:
-        """
-        Parses the input in form of a csv file to a
-        list of QuoteModel objects
-        input: path to csv (String)
-        output: List of QuoteModel objects
+        """Parse the input in form of a csv file. Return list of QuoteModel objects.
+        path -- path to file (String)
         """
         quote_list = []
         df = pd.read_csv(path)
@@ -77,11 +66,8 @@ class DocxIngestor(IngestorInterface):
     file_extension = 'docx'
 
     def parse(cls, path: str) -> list[QuoteModel]:
-        """
-        Parses the input in form of a docx file to a
-        list of QuoteModel objects
-        input: path to docx (String)
-        output: List of QuoteModel objects
+        """Parse the input in form of a docx file. Return list of QuoteModel objects.
+        path -- path to file (String)
         """
         quote_list = []
         doc = docx.Document(path)
@@ -98,11 +84,9 @@ class PdfIngestor(IngestorInterface):
     file_extension = ' pdf'
 
     def parse(cls, path: str) -> list[QuoteModel]:
-        """
-        Method converts the pdf to text via subprocess and cli
-        utility. The text is then ingested.
-        Input: path to pdf file (string)
-        Output: List of QuoteModel objects
+        """Method converts the pdf to text via subprocess and cli
+        utility. The text is then ingested and returns List of QuoteModel objects
+        path -- path to file
         """
         quote_list = []
         # create temporary file for txt input
@@ -130,11 +114,8 @@ class TxtIngestor(IngestorInterface):
     file_extension = 'txt'
 
     def parse(cls, path: str) -> list[QuoteModel]:
-        """
-        Parses the input in form of a txt file to a
-        list of QuoteModel objects
-        input: path to txt (String)
-        output: List of QuoteModel objects
+        """Parse the input in form of a txt file. Return list of QuoteModel objects.
+        path -- path to file (String)
         """
         quote_list = []
         with open(path, 'r') as file:
@@ -146,11 +127,11 @@ class TxtIngestor(IngestorInterface):
 
 
 class Ingestor(IngestorInterface):
-    """
-    Ingestor class encapsulates the helper classes for the different file type
+    """Ingestor class encapsulates the helper classes for the different file type
     (pdf, txt, csv, docx) and picks the Ingestor according to the file type. Realizes
     IngestorInterface
     """
+    file_extension = None
     ingestors = [DocxIngestor, PdfIngestor, TxtIngestor, CsvIngestor]
 
     @classmethod
