@@ -21,12 +21,12 @@ class MemeEngine:
             # copy image to new object
             meme = image.copy()
             # resize
-            meme.thumbnail(width)
+            meme.thumbnail((width, width))
             # add caption
             draw = ImageDraw.Draw(meme)
             random_x = randint(10, width - 50)
             random_y = randint(10, width - 50)
-            font =  ImageFont.truetype("src/_data/fonts/comici.ttf", 15)
+            font = ImageFont.truetype("_data/fonts/comici.ttf", 15)
             # draw body
             draw.text((random_x, random_y), body, font=font, encoding="unic", fill='red' )
             # save file
