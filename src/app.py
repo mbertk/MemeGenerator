@@ -72,12 +72,11 @@ def meme_post():
         with open(temp_img, "wb") as file:
             file.write(img_content)
 
-        # generate a meme using temp file and the body and author form parameters.
         body = request.form["body"]
         author = request.form["author"]
         path = generate_meme(temp_img, body, author)
-    except requests.exceptions.RequestException as err:
-        print(err)
+    except requests.exceptions.RequestException as error:
+        print(error)
         return render_template("cant open url")
 
     # remove temp image
