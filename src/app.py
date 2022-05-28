@@ -1,6 +1,9 @@
 from MemeGenerator.MemeEngine import MemeEngine
 from QuoteEngine.QuoteEngine import Ingestor
 from flask import Flask, render_template
+import random
+import os
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -19,16 +22,12 @@ def setup():
     for file in quote_files:
         quotes.extend(Ingestor.parse(file))
 
+    # check for ingestible files with os.walk
     images_path = "./_data/photos/dog/"
-    """
-    images = "./_data/photos/dog/"
     imgs = []
-    for root, dirs, files in os.walk(images):
-        imgs = [os.path.join(root, name) for name in files]
-
-    img = random.choice(imgs)
-    """
-    imgs = None
+    for root, dirs, files in os.walk(images_path):
+        for file_name in files:
+            imgs.append(os.path.join(root, file_name))
 
     return quotes, imgs
 
@@ -45,8 +44,8 @@ def meme_rand():
     # 1. select a random image from imgs array
     # 2. select a random quote from the quotes array
 
-    img = None
-    quote = None
+    img = random.choice(imgs)
+    quote = random.choice(quotes)
     path = meme.make_meme(img, quote.body, quote.author)
     return render_template('meme.html', path=path)
 
