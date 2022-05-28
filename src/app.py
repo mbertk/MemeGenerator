@@ -1,9 +1,12 @@
+import requests
+
 from MemeGenerator.MemeEngine import MemeEngine
 from QuoteEngine.QuoteEngine import Ingestor
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 import random
 import os
 from datetime import datetime
+from meme import generate_meme
 
 app = Flask(__name__)
 
@@ -39,11 +42,6 @@ quotes, imgs = setup()
 def meme_rand():
     """ Generate a random meme """
 
-    # @TODO:
-    # Use the random python standard library class to:
-    # 1. select a random image from imgs array
-    # 2. select a random quote from the quotes array
-
     img = random.choice(imgs)
     quote = random.choice(quotes)
     path = meme.make_meme(img, quote.body, quote.author)
@@ -66,8 +64,24 @@ def meme_post():
     # 2. Use the meme object to generate a meme using this temp
     #    file and the body and author form paramaters.
     # 3. Remove the temporary saved image.
+    image_url = request.form["body"]
+    time = datetime.now().strftime("%H_%M_%S")
+    temp_img = f"./temp_img{time}.jpg"
+    try:
+        img_content = requests.get(image_url, stream=True).content
+        with open(temp_img, "wb") as file:
+            file.write(img_content)
 
-    path = None
+        # generate a meme using temp file and the body and author form parameters.
+        body = request.form["body"]
+        author = request.form["author"]
+        path = generate_meme(temp_img, body, author)
+    except requests.exceptions.RequestException as err:
+        print(err)
+        return render_template("cant open url")
+
+    # remove temp image
+    os.remove(temp_img)
 
     return render_template('meme.html', path=path)
 
