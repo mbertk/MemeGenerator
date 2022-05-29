@@ -11,7 +11,7 @@ class MemeEngine:
 
     def __init__(self, path):
         if not os.path.isdir(path):
-            os.mkdirs(path)
+            os.mkdir(path)
         self.file_path = path
 
     def make_meme(self, path, body, author, width=500) -> str:
