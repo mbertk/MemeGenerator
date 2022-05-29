@@ -58,13 +58,7 @@ def meme_form():
 def meme_post():
     """ Create a user defined meme """
 
-    # @TODO:
-    # 1. Use requests to save the image from the image_url
-    #    form param to a temp local file.
-    # 2. Use the meme object to generate a meme using this temp
-    #    file and the body and author form paramaters.
-    # 3. Remove the temporary saved image.
-    image_url = request.form["body"]
+    image_url = request.form["image_url"]
     time = datetime.now().strftime("%H_%M_%S")
     temp_img = f"./temp_img{time}.jpg"
     try:
@@ -77,7 +71,7 @@ def meme_post():
         path = generate_meme(temp_img, body, author)
     except requests.exceptions.RequestException as error:
         print(error)
-        return render_template("cant open url")
+        return "cant open url"
 
     # remove temp image
     os.remove(temp_img)
@@ -86,4 +80,8 @@ def meme_post():
 
 
 if __name__ == "__main__":
+    if not os.path.isdir("./static"):
+        os.makedirs("./static")
+    if not os.path.isdir("./temp"):
+        os.makedirs("/.temp")
     app.run()

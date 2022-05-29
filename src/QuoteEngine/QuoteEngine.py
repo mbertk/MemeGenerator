@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from typing import List
 import docx
 import subprocess
 import tempfile
@@ -37,7 +38,7 @@ class IngestorInterface(ABC):
         return file_ext[-1] == cls.file_extension
 
     @abstractmethod
-    def parse(self, path: str) -> list[QuoteModel]:
+    def parse(self, path: str) -> List[QuoteModel]:
         """Abstract method to parse the file"""
         pass
 
@@ -47,7 +48,7 @@ class CsvIngestor(IngestorInterface):
     file_extension = 'csv'
 
     @classmethod
-    def parse(cls, path: str) -> list[QuoteModel]:
+    def parse(cls, path: str) -> List[QuoteModel]:
         """Parse the input in form of a csv file. Return list of QuoteModel objects.
         path -- path to file (String)
         """
@@ -68,7 +69,7 @@ class DocxIngestor(IngestorInterface):
     file_extension = 'docx'
 
     @classmethod
-    def parse(cls, path: str) -> list[QuoteModel]:
+    def parse(cls, path: str) -> List[QuoteModel]:
         """Parse the input in form of a docx file. Return list of QuoteModel objects.
         path -- path to file (String)
         """
@@ -89,7 +90,7 @@ class PdfIngestor(IngestorInterface):
     file_extension = 'pdf'
 
     @classmethod
-    def parse(cls, path: str) -> list[QuoteModel]:
+    def parse(cls, path: str) -> List[QuoteModel]:
         """Method converts the pdf to text via subprocess and cli
         utility. The text is then ingested and returns List of QuoteModel objects
         path -- path to file
@@ -131,7 +132,7 @@ class TxtIngestor(IngestorInterface):
     file_extension = 'txt'
 
     @classmethod
-    def parse(cls, path: str) -> list[QuoteModel]:
+    def parse(cls, path: str) -> List[QuoteModel]:
         """Parse the input in form of a txt file. Return list of QuoteModel objects.
         path -- path to file (String)
         """
@@ -156,7 +157,7 @@ class Ingestor(IngestorInterface):
     ingestors = [DocxIngestor, PdfIngestor, TxtIngestor, CsvIngestor]
 
     @classmethod
-    def parse(cls, path: str) -> list[QuoteModel]:
+    def parse(cls, path: str) -> List[QuoteModel]:
         """Select appropriate helper for given file based on file type"""
         for ingestor in cls.ingestors:
             if ingestor.can_ingest(path):
