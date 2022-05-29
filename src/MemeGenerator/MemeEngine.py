@@ -1,3 +1,5 @@
+import os.path
+
 from PIL import Image, ImageFont, ImageDraw
 from random import randint
 
@@ -8,6 +10,8 @@ class MemeEngine:
     """
 
     def __init__(self, path):
+        if not os.path.isdir(path):
+            os.mkdirs(path)
         self.file_path = path
 
     def make_meme(self, path, body, author, width=500) -> str:
