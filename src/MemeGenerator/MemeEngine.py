@@ -24,8 +24,8 @@ class MemeEngine:
             meme.thumbnail((width, width))
             # add caption
             draw = ImageDraw.Draw(meme)
-            random_x = randint(10, width - 50)
-            random_y = randint(10, width - 50)
+            random_x = randint(10, width - 250)
+            random_y = randint(10, width - 250)
             font = ImageFont.truetype("_data/fonts/comici.ttf", 15)
             # draw body
             draw.text((random_x, random_y), body, font=font, encoding="unic", fill='red' )
